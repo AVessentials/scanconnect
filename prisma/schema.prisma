@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Owner {
+  id          String   @id @default(uuid())
+  name        String
+  phone       String
+  email       String   @unique
+  whatsapp    String?
+  smsEnabled       Boolean  @default(true)
+  whatsappEnabled  Boolean  @default(true)
+  emailEnabled     Boolean  @default(true)
+  pushEnabled      Boolean  @default(true)
+  pollIntervalSecs         Int      @default(30)
+  soundEnabled             Boolean  @default(true)
+  browserNotificationsEnabled Boolean @default(true)
+  notificationSound        String   @default("chime")
+  digestEnabled            Boolean  @default(false)
+  lastViewedNotificationsAt DateTime?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  stickers    Sticker[]
+  pushSubscriptions PushSubscription[]
+}
+
+model Sticker {
+  id          String   @id @default(uuid())
+  qrCodeId    String   @unique @default(uuid())
+  label       String?  // Optional label like "My Honda City"
+  status      String   @default("unassigned") // unassigned, active, inactive
+  ownerId     String?
+  owner       Owner?   @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  contactRequests ContactRequest[]
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  phone     String
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone, code])
+  @@index([phone, createdAt])
+  @@index([expiresAt])
+}
+
+model FailedOtpAttempt {
+  id        String   @id @default(uuid())
+  phone     String
+  createdAt DateTime @default(now())
+
+  @@index([phone, createdAt])
+}
+
+model ContactRequest {
+  id               String   @id @default(uuid())
+  stickerId        String
+  sticker          Sticker  @relation(fields: [stickerId], references: [id])
+  message          String?
+  callerName       String?
+  smsDelivered       Boolean  @default(false)
+  whatsappDelivered  Boolean  @default(false)
+  emailDelivered     Boolean  @default(false)
+  reply            String?
+  repliedAt        DateTime?
+  createdAt        DateTime @default(now())
+
+  @@index([stickerId, createdAt])
+}
+
+model PushSubscription {
+  id         String   @id @default(uuid())
+  ownerId    String
+  owner      Owner    @relation(fields: [ownerId], references: [id])
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  createdAt  DateTime @default(now())
+}

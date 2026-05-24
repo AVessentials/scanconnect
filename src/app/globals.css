@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --primary: #0f172a;
+  --primary-light: #1e293b;
+  --accent: #10b981;
+  --accent-light: #34d399;
+  --accent-dark: #059669;
+}
+
+@theme {
+  --color-primary: #0f172a;
+  --color-primary-light: #1e293b;
+  --color-accent: #10b981;
+  --color-accent-light: #34d399;
+  --color-accent-dark: #059669;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  }
+}
+
+/* Sticker/scan page specific styles */
+.sticker-card {
+  @apply bg-white rounded-3xl shadow-2xl border border-zinc-100 overflow-hidden;
+  max-width: 420px;
+  width: 100%;
+}
+
+.sticker-qr-wrapper {
+  @apply bg-white p-4 rounded-2xl shadow-inner;
+}
+
+/* Animated gradient for scan page */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Pulse animation for scan prompt */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2s ease-in-out infinite;
+}
+
+/* Glass morphism effects */
+.glass {
+  @apply backdrop-blur-md bg-white/70 border border-white/20;
+}
+
+/* Live notification indicator animations */
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 1s ease-in-out 3;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
