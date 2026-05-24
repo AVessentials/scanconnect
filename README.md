@@ -82,7 +82,7 @@ This creates a `dev.db` SQLite file and generates the Prisma client.
 
 ### 3. Configure Environment
 
-Copy the example env file and fill in the values:
+Copy the example env file and fill in the values (the `.env.example` already exists in the project):
 
 ```bash
 cp .env.example .env.local
@@ -108,19 +108,21 @@ cp .env.example .env.local
 | `VAPID_PRIVATE_KEY` | Web Push private key | Same command as above |
 | `VAPID_SUBJECT` | Web Push subject | e.g. `mailto:admin@yourdomain.com` |
 
-### 4. Create an Owner Profile
-
-Start the dev server:
+### 4. Start the Dev Server
 
 ```bash
 npm run dev
 ```
 
-Open **http://localhost:3000/api/setup** to create your admin owner profile (name, phone, email). This sets the `ADMIN_OWNER_ID` in your database.
+### 5. Create an Owner Profile
 
-### 5. Start Using
+Open the **Settings** page at [http://localhost:3000/dashboard/settings](http://localhost:3000/dashboard/settings) to configure your admin profile and notification channels.
 
-Visit **http://localhost:3000/dashboard** to manage your stickers and notifications.
+The first time you visit, you'll need to ensure an owner record exists. If `ADMIN_OWNER_ID` is not set, the settings page will auto-select the first owner in the database. You can set `ADMIN_OWNER_ID` in `.env.local` to lock it to a specific owner.
+
+### 6. Start Using
+
+Visit [http://localhost:3000/dashboard](http://localhost:3000/dashboard) to manage your stickers, view notifications, and configure channels.
 
 ---
 
@@ -146,14 +148,14 @@ Visit **http://localhost:3000/dashboard** to manage your stickers and notificati
 3. Set environment variables in Vercel dashboard
 4. Deploy — SQLite will work with Vercel's serverless functions
 
-### Docker
-
-Build a container:
+### Manual
 
 ```bash
-docker build -t scanconnect .
-docker run -p 3000:3000 scanconnect
+npm run build
+npm start
 ```
+
+The production server will be available at **http://localhost:3000**.
 
 ---
 
